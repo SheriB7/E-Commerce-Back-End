@@ -46,6 +46,20 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
+  try{
+    const updateCategoryData = await Category.update(req.body, {
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!updateCategoryData[0]) {
+      res.status(404).json({ message: 'Category does not exit with this id!' });
+      return;
+    }
+    res.status(200).json(updateCategoryData);
+  }catch(err){
+    res.status(400).json(err)
+  }
 });
 
 router.delete('/:id', (req, res) => {
