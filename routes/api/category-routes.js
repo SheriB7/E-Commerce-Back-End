@@ -10,7 +10,8 @@ router.get('/', async (req, res) => {
     const categoriesData = await Category.findAll({ include: [{model:Product}]
     })
     res.status(200).json(categoriesData);
-  }catch(err){
+  }
+  catch(err){
     res.status(400).json(err)
   }
 });
@@ -39,7 +40,8 @@ router.post('/', (req, res) => {
   try{
     const newCategoryData = await Category.create(req.body)
     res.status(200).json(newCategoryData);
-  }catch(err){
+  }
+  catch(err){
     res.status(400).json(err)
   }
 });
@@ -47,23 +49,37 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
   try{
-    const updateCategoryData = await Category.update(req.body, {
-      where: {
-        id: req.params.id,
+    const updateCategoryData = await Category.update(req.body, 
+      {where: {id: req.params.id,
       },
     });
     if (!updateCategoryData[0]) {
-      res.status(404).json({ message: 'Category does not exit with this id!' });
+      res.status(404).json({ message: 'Category does not exist with this id!' });
       return;
     }
     res.status(200).json(updateCategoryData);
-  }catch(err){
+  }
+  catch(err){
     res.status(400).json(err)
   }
 });
 
 router.delete('/:id', (req, res) => {
   // delete a category by its `id` value
+  try{
+    const deteCategory = await Category.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!deteCategory) {
+      res.status(404).json({ message: 'Category does not exist with this id!' });
+      return;
+    }
+    res.status(200).json(deteCategory);
+  }catch(err){
+    res.status(400).json(err)
+  }
 });
 
 module.exports = router;
