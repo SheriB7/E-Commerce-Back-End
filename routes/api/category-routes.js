@@ -73,7 +73,18 @@ router.delete('/:id', (req, res) => {
     },
     });
     if (!deteCategory) {
-      res.status(404).json({ message: 'Category does not exist with this id!' });
+      res.status(404).json({ message: 'try{
+        const productData = await Product.findByPk(req.params.id,{
+          include: [{model:Category},{model:Tag}]
+        });
+        if(!productData){
+          res.status(404).json({message: 'No product found with that id!'})
+        }
+        res.status(200).json(productData);
+      }catch(err){
+        res.status(500).json(err);
+      }
+    });' });
       return;
     }
     res.status(200).json(deteCategory);
